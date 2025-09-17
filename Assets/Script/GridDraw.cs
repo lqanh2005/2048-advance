@@ -6,7 +6,7 @@ public class GridDrawer : MonoBehaviour
     [Header("Grid Settings")]
     public int rows = 5;
     public int cols = 5;
-    public Color lineColor = Color.black;
+    public Color lineColor = Color.red;
     public float lineThickness = 2f;
 
     private RectTransform rt;
@@ -25,7 +25,7 @@ public class GridDrawer : MonoBehaviour
         // Vẽ các đường dọc
         for (int c = 0; c <= cols; c++)
         {
-            CreateLine(new Vector2(c * cellW, 0), new Vector2(c * cellW, -rt.rect.height));
+            CreateLine(new Vector2(c * cellW, 0), new Vector2(c * cellW, rt.rect.height));
         }
 
         // Vẽ các đường ngang
@@ -39,13 +39,13 @@ public class GridDrawer : MonoBehaviour
     {
         GameObject lineObj = new GameObject("Line", typeof(Image));
         lineObj.transform.SetParent(transform, false);
-
+        
         var img = lineObj.GetComponent<Image>();
         img.color = lineColor;
 
         RectTransform lrt = lineObj.GetComponent<RectTransform>();
         lrt.anchorMin = lrt.anchorMax = new Vector2(0, 1); // top-left
-        lrt.pivot = new Vector2(0, 1);
+        lrt.pivot = new Vector2(0, 0);
 
         Vector2 dir = end - start;
         float len = dir.magnitude;

@@ -6,7 +6,7 @@ public class GamePlayCtrl : MonoBehaviour
 {
     public static GamePlayCtrl Instance;
 
-    public BoardManager gridManager;
+    public BoardManager boardManager;
     public SwipCtrl swipCtrl;
     public ActiveTileMove tileMove;
     public UIManger uiManger;

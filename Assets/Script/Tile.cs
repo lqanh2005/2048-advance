@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Tile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class Tile : MonoBehaviour
 {
     [Header("---------------------Grid Position-------------")]
     public int row;
@@ -14,16 +14,18 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public Image backgroundImage;
     public TMP_Text tileText;
     public RectTransform rt;
-
-    private Vector2 startPos;
-    private Vector2 endPos;
-    private float swipeThreshold = 50f;
+    
+    [Header("Visual Settings")]
+    public Color originalColor;
+    public Color selectedColor = Color.white;
+    public bool isSelected = false;
 
     public void Refresh(float cellsize)
     {
         float x = col * cellsize;
-        float y = -row * cellsize;
-        rt.anchoredPosition = new Vector2(x, y);
+        float y = row * cellsize;
+        
+        rt.anchoredPosition = new Vector2(x, -y);
         rt.sizeDelta = new Vector2(cellsize * width, cellsize * height);
     }
     public void Setup(int r, int c, int h, int w, float cellsize, string value, Color color)
@@ -32,30 +34,15 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         col = c;
         height = h;
         width = w;
+        originalColor = color; // Lưu màu gốc
         backgroundImage.color = color;
         tileText.text = value;
         Refresh(cellsize);
+    }
+    
+    public void SetSelected(bool selected)
+    {
+        isSelected = selected;
+        //backgroundImage.color = selected ? selectedColor : originalColor;
     }   
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        startPos = eventData.position;
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        endPos = eventData.position;
-        Vector2 delta = endPos - startPos;
-        if (delta.magnitude < swipeThreshold) return;
-        Vector2Int dir;
-        if(Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
-        {
-            dir = delta.x > 0 ? Vector2Int.right : Vector2Int.left;
-        }
-        else
-        {
-            dir = delta.y > 0 ? Vector2Int.up : Vector2Int.down;
-        }
-
-    }
 }
