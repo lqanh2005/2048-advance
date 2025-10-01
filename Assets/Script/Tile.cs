@@ -15,9 +15,6 @@ public class Tile : MonoBehaviour
     public TMP_Text tileText;
     public RectTransform rt;
     
-    [Header("Visual Settings")]
-    public Color originalColor;
-    public Color selectedColor = Color.white;
     public bool isSelected = false;
 
     public void Refresh(float cellsize)
@@ -28,14 +25,13 @@ public class Tile : MonoBehaviour
         rt.anchoredPosition = new Vector2(x, -y);
         rt.sizeDelta = new Vector2(cellsize * width, cellsize * height);
     }
-    public void Setup(int r, int c, int h, int w, float cellsize, string value, Color color)
+    public void Setup(int r, int c, int h, int w, float cellsize, string value)
     {
         row = r;
         col = c;
         height = h;
         width = w;
-        originalColor = color; // Lưu màu gốc
-        backgroundImage.color = color;
+        backgroundImage.color = GetColor(int.Parse(value));
         tileText.text = value;
         Refresh(cellsize);
     }
@@ -43,6 +39,16 @@ public class Tile : MonoBehaviour
     public void SetSelected(bool selected)
     {
         isSelected = selected;
-        //backgroundImage.color = selected ? selectedColor : originalColor;
-    }   
+    }
+    public Color GetColor(int value)
+    {
+        switch (value)
+        {
+            case 4: return Color.magenta;
+            case 8: return Color.yellow;
+            case 16: return Color.green;
+            case 32: return Color.clear;
+            default: return Color.cyan;
+        }
+    }
 }

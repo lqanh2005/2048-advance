@@ -629,9 +629,9 @@ MonoBehaviour:
   raycaster: {fileID: 1691787762}
   eventSystem: {fileID: 1605668682}
   swipeThreshold: 50
-  showSwipeDebug: 1
   mergeAnimationDuration: 0.1
   mergeEase: 30
+  requireEmptySpaceForMerge: 1
 --- !u!1 &1605668680
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,7 +787,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &1691787763
 MonoBehaviour:
   m_ObjectHideFlags: 0
