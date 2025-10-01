@@ -40,16 +40,16 @@ public class SettingPanel : MonoBehaviour
         sliderVib.onValueChanged.AddListener(v => {
             PlayerPrefs.SetFloat(KEY_VIBE, v);
         });
-        //GameManager.Instance.musicController.HandleMusic();
+        GameManager.Instance.musicController.HandleMusic();
     }
     void ApplyMusic(float v)
     {
-        //GameManager.Instance.musicController.audioMusic.volume = v;
+        GameManager.Instance.musicController.audioMusic.volume = v;
     }
 
     void ApplySfx(float v)
     {
-        //GameManager.Instance.musicController.audioSouceSfx.volume = v;
+        GameManager.Instance.musicController.audioSouceSfx.volume = v;
     }
 
     public void TryVibrate()
@@ -61,7 +61,7 @@ public class SettingPanel : MonoBehaviour
         if (vibeSetting > 0.5f)
         {
             Debug.Log("Vibration được bật, gọi VibrationMng.Vibrate()");
-            //VibrationMng.Vibrate();
+            VibrationMng.Vibrate();
         }
         else
         {

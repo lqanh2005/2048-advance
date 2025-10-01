@@ -7,7 +7,7 @@ public class GamePlayCtrl : MonoBehaviour
     public static GamePlayCtrl Instance;
 
     public BoardManager boardManager;
-    public UIManger uiManger;
+    public UIManager uiManger;
     public LevelLoader levelLoader;
 
     private void Awake()
@@ -17,6 +17,7 @@ public class GamePlayCtrl : MonoBehaviour
 
     private void Start()
     {
+        uiManger.Init();
         boardManager.Init();
     }
 }

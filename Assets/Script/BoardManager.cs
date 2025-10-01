@@ -13,7 +13,6 @@ public class BoardManager : MonoBehaviour
     public RectTransform boardRoot;
     public RectTransform tilesParent;
     public Tile tilePrefab;
-    public LevelLoader levelLoader;
 
     private float cellSize;
     private bool[,] occ;
@@ -39,9 +38,10 @@ public class BoardManager : MonoBehaviour
     public void Init()
     {
         PlayerPrefs.GetInt("CurrentLevel", 1);
-        //string level = "level_" + PlayerPrefs.GetInt("CurrentLevel", 1);
-        string level = "level_2";
+        string level = "level_" + PlayerPrefs.GetInt("CurrentLevel", 1);
+        //string level = "level_2";
         SpawnLevelFromJson(level);
+        GamePlayCtrl.Instance.levelLoader.targetValue = int.Parse(GamePlayCtrl.Instance.levelLoader.tileLst[0].tileText.text) * 2;
     }
     private void InitBoard()
     {
@@ -55,13 +55,8 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     public void SpawnLevelFromJson(string jsonFileName)
     {
-        if (levelLoader == null)
-        {
-            return;
-        }
-        
         // Load dữ liệu từ file JSON
-        LevelData levelData = levelLoader.LoadLevelFromResources(jsonFileName);
+        LevelData levelData = GamePlayCtrl.Instance.levelLoader.LoadLevelFromResources(jsonFileName);
         
         if (levelData == null)
         {
@@ -91,18 +86,11 @@ public class BoardManager : MonoBehaviour
             {
                 int value = int.Parse(tileData.value);
                 (tileWidth, tileHeight) = Tile.GetSizeFromValue(value);
-                Debug.Log($"📐 Auto-size cho value {value}: {tileWidth}x{tileHeight}");
             }
             
-            tile.Setup(
-                tileData.row,
-                tileData.col,
-                tileHeight,
-                tileWidth,
-                cellSize,
-                tileData.value
-            );
-            
+            tile.Setup(tileData.row, tileData.col, tileHeight, tileWidth, cellSize, tileData.value);
+            GamePlayCtrl.Instance.levelLoader.AddTileToList(tile);
+
             MarkOccupancy(tile, true);
             
             // Đặt active tile nếu có
@@ -121,6 +109,9 @@ public class BoardManager : MonoBehaviour
         {
             Destroy(tilesParent.GetChild(i).gameObject);
         }
+        
+        // Xóa tất cả tile khỏi danh sách theo dõi
+        GamePlayCtrl.Instance.levelLoader.ClearTileList();
         
         // Reset active tile
         activeTile = null;
@@ -527,6 +518,9 @@ public class BoardManager : MonoBehaviour
         mergeSequence.Play();
         yield return mergeSequence.WaitForCompletion();
         
+        // Xóa tile đã merge khỏi danh sách theo dõi
+        GamePlayCtrl.Instance.levelLoader.RemoveTileFromList(tileToRemove);
+        
         // Xóa tile đã merge
         Destroy(tileToRemove.gameObject);
         
@@ -577,6 +571,9 @@ public class BoardManager : MonoBehaviour
         // Kiểm tra merge tiếp theo sau khi hoàn thành
         yield return new WaitForSeconds(0.1f);
         CheckAndMergeTiles();
+        
+        // Kiểm tra điều kiện thắng
+        CheckWinCondition();
     }
     
     /// <summary>
@@ -630,6 +627,27 @@ public class BoardManager : MonoBehaviour
         }
         
         return true;
+    }
+    
+    /// <summary>
+    /// Kiểm tra điều kiện thắng
+    /// </summary>
+    void CheckWinCondition()
+    {
+        int remainingTiles = GamePlayCtrl.Instance.levelLoader.GetActiveTilesCount();
+        
+        if (GamePlayCtrl.Instance.levelLoader.IsWinCondition())
+        {
+            int highestValue = GamePlayCtrl.Instance.levelLoader.GetHighestTileValue();
+            Debug.Log($"🎉 Chúc mừng! Bạn đã hoàn thành level với tile {highestValue}!");
+            // TODO: Gọi UI hiển thị màn hình thắng hoặc chuyển level tiếp theo
+            GamePlayCtrl.Instance.uiManger.winBox.gameObject.SetActive(true);
+        }
+        else
+        {
+            int highestValue = GamePlayCtrl.Instance.levelLoader.GetHighestTileValue();
+            Debug.Log($"🎯 Còn lại {remainingTiles} tiles. Tile cao nhất hiện tại: {highestValue}");
+        }
     }
     
 }
