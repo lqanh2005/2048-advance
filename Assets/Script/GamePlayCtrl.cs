@@ -7,12 +7,16 @@ public class GamePlayCtrl : MonoBehaviour
     public static GamePlayCtrl Instance;
 
     public BoardManager boardManager;
-    public SwipCtrl swipCtrl;
-    public ActiveTileMove tileMove;
     public UIManger uiManger;
+    public LevelLoader levelLoader;
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        boardManager.Init();
     }
 }

@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,6 +13,7 @@ public class BoardManager : MonoBehaviour
     public RectTransform boardRoot;
     public RectTransform tilesParent;
     public Tile tilePrefab;
+    public LevelLoader levelLoader;
 
     private float cellSize;
     private bool[,] occ;
@@ -36,10 +36,12 @@ public class BoardManager : MonoBehaviour
     public Ease mergeEase = Ease.OutBounce; // Loại easing cho merge
     public bool requireEmptySpaceForMerge = true; // Yêu cầu có khoảng trống để merge
 
-    private void Start()
+    public void Init()
     {
-        InitBoard();
-        SpawnLevelExample();
+        PlayerPrefs.GetInt("CurrentLevel", 1);
+        //string level = "level_" + PlayerPrefs.GetInt("CurrentLevel", 1);
+        string level = "level_2";
+        SpawnLevelFromJson(level);
     }
     private void InitBoard()
     {
@@ -48,26 +50,80 @@ public class BoardManager : MonoBehaviour
         cellSize = Mathf.Min(boardWidth / cols, boardHeight / rows);
         occ = new bool[rows, cols];
     }
-    void SpawnLevelExample()
+    /// <summary>
+    /// Load và spawn level từ file JSON
+    /// </summary>
+    public void SpawnLevelFromJson(string jsonFileName)
     {
-        // Ví dụ tạo 1 tile 2x2 màu xanh, active
-        activeTile = Instantiate(tilePrefab, tilesParent);
-        activeTile.Setup(0, 0, 2, 2, cellSize, "8");
-        MarkOccupancy(activeTile, true);
-
-        // Ví dụ tạo 1 tile 1x2 màu hồng, chướng ngại
-        var blocker = Instantiate(tilePrefab, tilesParent);
-        blocker.Setup(0, 2, 1, 2, cellSize, "4");
-        MarkOccupancy(blocker, true);
+        if (levelLoader == null)
+        {
+            return;
+        }
         
-        // Tạo thêm tile để test merge
-        var tile2 = Instantiate(tilePrefab, tilesParent);
-        tile2.Setup(2, 2, 1, 1, cellSize, "2");
-        MarkOccupancy(tile2, true);
+        // Load dữ liệu từ file JSON
+        LevelData levelData = levelLoader.LoadLevelFromResources(jsonFileName);
         
-        var tile3 = Instantiate(tilePrefab, tilesParent);
-        tile3.Setup(2, 1, 1, 1, cellSize, "2");
-        MarkOccupancy(tile3, true);
+        if (levelData == null)
+        {
+            return;
+        }
+        
+        // Cập nhật kích thước bảng
+        rows = levelData.rows;
+        cols = levelData.cols;
+        
+        // Khởi tạo lại bảng với kích thước mới
+        InitBoard();
+        
+        // Xóa tất cả tiles cũ (nếu có)
+        ClearAllTiles();
+        
+        // Spawn từng tile
+        foreach (TileData tileData in levelData.tiles)
+        {
+            Tile tile = Instantiate(tilePrefab, tilesParent);
+            
+            // Nếu JSON không có width/height (= 0), tự động lấy từ value
+            int tileWidth = tileData.width;
+            int tileHeight = tileData.height;
+            
+            if (tileWidth == 0 || tileHeight == 0)
+            {
+                int value = int.Parse(tileData.value);
+                (tileWidth, tileHeight) = Tile.GetSizeFromValue(value);
+                Debug.Log($"📐 Auto-size cho value {value}: {tileWidth}x{tileHeight}");
+            }
+            
+            tile.Setup(
+                tileData.row,
+                tileData.col,
+                tileHeight,
+                tileWidth,
+                cellSize,
+                tileData.value
+            );
+            
+            MarkOccupancy(tile, true);
+            
+            // Đặt active tile nếu có
+            if (tileData.isActive)
+            {
+                activeTile = tile;
+                SetTileVisual(activeTile, true);
+            }
+        }
+        
+    }
+    void ClearAllTiles()
+    {
+        // Xóa tất cả child objects trong tilesParent
+        for (int i = tilesParent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(tilesParent.GetChild(i).gameObject);
+        }
+        
+        // Reset active tile
+        activeTile = null;
     }
     public void MarkOccupancy(Tile t, bool value)
     {
@@ -425,11 +481,19 @@ public class BoardManager : MonoBehaviour
         // Tăng giá trị gấp đôi
         int currentValue = int.Parse(mainTile.tileText.text);
         int newValue = currentValue * 2;
-        mainTile.tileText.text = newValue.ToString();
         
         // Clear occupancy của cả 2 tile trước khi merge
         MarkOccupancy(mainTile, false);
         MarkOccupancy(tileToRemove, false);
+        
+        // Lưu kích thước cũ để check có thay đổi không
+        int oldWidth = mainTile.width;
+        int oldHeight = mainTile.height;
+        
+        // Cập nhật value và kích thước mới theo quy ước
+        (int newWidth, int newHeight) = Tile.GetSizeFromValue(newValue);
+        
+        Debug.Log($"🔄 Merge: {currentValue} + {currentValue} = {newValue} | Size: {oldWidth}x{oldHeight} -> {newWidth}x{newHeight}");
         
         // Animation merge
         Sequence mergeSequence = DOTween.Sequence();
@@ -463,11 +527,45 @@ public class BoardManager : MonoBehaviour
         mergeSequence.Play();
         yield return mergeSequence.WaitForCompletion();
         
-        // Mark occupancy cho tile mới ở vị trí tile2
-        MarkOccupancy(mainTile, true);
-        
         // Xóa tile đã merge
         Destroy(tileToRemove.gameObject);
+        
+        // Cập nhật value và kích thước mới
+        mainTile.UpdateValue(newValue, cellSize);
+        
+        // Kiểm tra xem vị trí hiện tại có đủ chỗ cho kích thước mới không
+        bool canPlaceAtCurrent = CanPlaceTileAt(mainTile.row, mainTile.col, mainTile.width, mainTile.height);
+        
+        if (canPlaceAtCurrent)
+        {
+            // Đủ chỗ - đặt ngay tại vị trí hiện tại
+            MarkOccupancy(mainTile, true);
+            Debug.Log($"✅ Tile {newValue} đặt tại ({mainTile.row}, {mainTile.col})");
+        }
+        else
+        {
+            
+            bool foundNewPosition = FindNearestValidPosition(mainTile);
+            
+            if (foundNewPosition)
+            {
+                // Animate di chuyển đến vị trí mới
+                float newXS = mainTile.col * cellSize;
+                float newYs = -(mainTile.row * cellSize);
+                mainTile.rt.DOAnchorPos(new Vector2(newXS, newYs), 0.3f).SetEase(Ease.OutQuad);
+                
+                MarkOccupancy(mainTile, true);
+            }
+            else
+            {
+                mainTile.width = oldWidth;
+                mainTile.height = oldHeight;
+                mainTile.tileText.text = newValue.ToString();
+                mainTile.backgroundImage.color = mainTile.GetColor(newValue);
+                mainTile.Refresh(cellSize);
+                MarkOccupancy(mainTile, true);
+            }
+        }
 
         // Cập nhật activeTile nếu cần
         if (activeTile == tileToRemove)
@@ -479,6 +577,44 @@ public class BoardManager : MonoBehaviour
         // Kiểm tra merge tiếp theo sau khi hoàn thành
         yield return new WaitForSeconds(0.1f);
         CheckAndMergeTiles();
+    }
+    
+    /// <summary>
+    /// Tìm vị trí gần nhất có thể đặt tile
+    /// </summary>
+    bool FindNearestValidPosition(Tile tile)
+    {
+        int bestRow = tile.row;
+        int bestCol = tile.col;
+        float bestDistance = float.MaxValue;
+        bool found = false;
+        
+        // Tìm kiếm theo vòng tròn từ vị trí hiện tại
+        for (int r = 0; r <= rows - tile.height; r++)
+        {
+            for (int c = 0; c <= cols - tile.width; c++)
+            {
+                if (CanPlaceTileAt(r, c, tile.width, tile.height))
+                {
+                    float distance = Mathf.Abs(r - tile.row) + Mathf.Abs(c - tile.col);
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestRow = r;
+                        bestCol = c;
+                        found = true;
+                    }
+                }
+            }
+        }
+        
+        if (found)
+        {
+            tile.row = bestRow;
+            tile.col = bestCol;
+        }
+        
+        return found;
     }
     bool CanPlaceTileAt(int row, int col, int width, int height)
     {

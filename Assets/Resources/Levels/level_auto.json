@@ -1,0 +1,48 @@
+{
+    "rows": 6,
+    "cols": 6,
+    "tiles": [
+        {
+            "row": 0,
+            "col": 0,
+            "height": 0,
+            "width": 0,
+            "value": "2",
+            "isActive": true
+        },
+        {
+            "row": 0,
+            "col": 2,
+            "height": 0,
+            "width": 0,
+            "value": "2",
+            "isActive": false
+        },
+        {
+            "row": 2,
+            "col": 0,
+            "height": 0,
+            "width": 0,
+            "value": "4",
+            "isActive": false
+        },
+        {
+            "row": 2,
+            "col": 3,
+            "height": 0,
+            "width": 0,
+            "value": "4",
+            "isActive": false
+        },
+        {
+            "row": 4,
+            "col": 1,
+            "height": 0,
+            "width": 0,
+            "value": "8",
+            "isActive": false
+        }
+    ]
+}
+
+

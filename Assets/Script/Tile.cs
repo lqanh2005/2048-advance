@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -36,6 +34,58 @@ public class Tile : MonoBehaviour
         Refresh(cellsize);
     }
     
+    /// <summary>
+    /// Cập nhật value và tự động thay đổi kích thước theo quy ước
+    /// </summary>
+    public void UpdateValue(int newValue, float cellsize)
+    {
+        tileText.text = newValue.ToString();
+        
+        // Lấy kích thước mới theo value
+        (int newWidth, int newHeight) = GetSizeFromValue(newValue);
+        width = newWidth;
+        height = newHeight;
+        
+        // Cập nhật màu
+        backgroundImage.color = GetColor(newValue);
+        
+        // Refresh vị trí và kích thước
+        Refresh(cellsize);
+    }
+    
+    /// <summary>
+    /// Quy ước: value -> (width, height)
+    /// 2 = 1x1
+    /// 4 = 1x2
+    /// 8 = 2x1
+    /// 16 = 2x2
+    /// 32 = 2x3 (hoặc tùy chỉnh)
+    /// 64 = 3x2
+    /// 128 = 3x3
+    /// ...
+    /// </summary>
+    public static (int width, int height) GetSizeFromValue(int value)
+    {
+        switch (value)
+        {
+            case 2:   return (1, 1);  // 1x1
+            case 4:   return (1, 2);  // 1x2
+            case 8:   return (2, 1);  // 2x1
+            case 16:  return (2, 2);  // 2x2
+            case 32:  return (2, 3);  // 2x3
+            case 64:  return (3, 2);  // 3x2
+            case 128: return (3, 3);  // 3x3
+            case 256: return (3, 4);  // 3x4
+            case 512: return (4, 3);  // 4x3
+            case 1024: return (4, 4); // 4x4
+            default:
+                int level = Mathf.FloorToInt(Mathf.Log(value, 2)) - 1;
+                int w = 1 + (level / 2);
+                int h = 1 + ((level + 1) / 2);
+                return (w, h);
+        }
+    }
+    
     public void SetSelected(bool selected)
     {
         isSelected = selected;
@@ -47,7 +97,7 @@ public class Tile : MonoBehaviour
             case 4: return Color.magenta;
             case 8: return Color.yellow;
             case 16: return Color.green;
-            case 32: return Color.clear;
+            case 32: return Color.blue;
             default: return Color.cyan;
         }
     }
