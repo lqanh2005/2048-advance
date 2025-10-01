@@ -258,6 +258,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df04c873c71a91e49923709701bd8c70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bannerID: ca-app-pub-4667689154549040/5142291943
+  AOAID: ca-app-pub-4667689154549040/8889965268
+  HasBanner: 0
+  IsShowingAds: 0
+  isLoadingAOA: 0
+  _adInterUnitId: ca-app-pub-3940256099942544/1033173712
+  _adRewardedUnitId: ca-app-pub-3940256099942544/5224354917
+--- !u!1 &1194831986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1194831989}
+  - component: {fileID: 1194831988}
+  - component: {fileID: 1194831987}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1194831987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194831986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &1194831988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194831986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &1194831989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194831986}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1272461980
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,6 +362,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93ddae86e52f9f34fa61e0a5e040e29d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicController: {fileID: 2069502411}
+  adsController: {fileID: 1115644757}
+  alalyticController: {fileID: 2012455595}
 --- !u!4 &1272461982
 Transform:
   m_ObjectHideFlags: 0
@@ -487,6 +565,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b2734fab169e24c843f96b15729863, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSouceSfx: {fileID: 0}
+  audioMusic: {fileID: 0}
+  click: {fileID: 0}
+  theme: {fileID: 0}
+  win: {fileID: 0}
 --- !u!222 &313514232574740368
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1243,3 +1326,4 @@ SceneRoots:
   - {fileID: 1316910112}
   - {fileID: 2685766184051641124}
   - {fileID: 1272461982}
+  - {fileID: 1194831989}
