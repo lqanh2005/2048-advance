@@ -1,0 +1,30 @@
+{
+  "rows": 6,
+  "cols": 6,
+  "tiles": [
+    {
+      "row": 4,
+      "col": 3,
+      "height": 2,
+      "width": 2,
+      "value": "16",
+      "isActive": true
+    },
+    {
+      "row": 4,
+      "col": 5,
+      "height": 2,
+      "width": 1,
+      "value": "8",
+      "isActive": true
+    },
+    {
+      "row": 0,
+      "col": 1,
+      "height": 2,
+      "width": 1,
+      "value": "8",
+      "isActive": true
+    }
+  ]
+}

@@ -42,7 +42,7 @@ public class Tile : MonoBehaviour
         tileText.text = newValue.ToString();
         
         // Lấy kích thước mới theo value
-        (int newWidth, int newHeight) = GetSizeFromValue(newValue);
+        (int newHeight, int newWidth) = GetSizeFromValue(newValue);
         width = newWidth;
         height = newHeight;
         
@@ -64,7 +64,7 @@ public class Tile : MonoBehaviour
     /// 128 = 3x3
     /// ...
     /// </summary>
-    public static (int width, int height) GetSizeFromValue(int value)
+    public static (int height, int width) GetSizeFromValue(int value)
     {
         switch (value)
         {

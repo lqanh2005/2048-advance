@@ -179,6 +179,55 @@ MonoBehaviour:
   nextBtn: {fileID: 3092972528033989301}
   settingBtn: {fileID: 1086420602}
   levelTxt: {fileID: 1574111008}
+--- !u!1 &263086588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 263086589}
+  - component: {fileID: 263086590}
+  m_Layer: 0
+  m_Name: LevelMng
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &263086589
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263086588}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1462865957}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &263086590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263086588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa40f0c4fc5f63a479b3cd70adb45476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gamePlayCtrl: {fileID: 0}
+  nextLevelButton: {fileID: 0}
+  restartButton: {fileID: 0}
+  previousLevelButton: {fileID: 0}
+  levelText: {fileID: 0}
 --- !u!1 &405922131
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +673,7 @@ Transform:
   m_Children:
   - {fileID: 1171279199}
   - {fileID: 2021125954}
+  - {fileID: 263086589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1517658326
@@ -1147,7 +1197,7 @@ GameObject:
   - component: {fileID: 2021125954}
   - component: {fileID: 2021125955}
   m_Layer: 0
-  m_Name: LevelMng
+  m_Name: LevelLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

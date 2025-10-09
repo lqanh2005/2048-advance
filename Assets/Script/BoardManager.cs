@@ -41,7 +41,6 @@ public class BoardManager : MonoBehaviour
         string level = "level_" + PlayerPrefs.GetInt("CurrentLevel", 1);
         //string level = "level_2";
         SpawnLevelFromJson(level);
-        GamePlayCtrl.Instance.levelLoader.targetValue = int.Parse(GamePlayCtrl.Instance.levelLoader.tileLst[0].tileText.text) * 2;
     }
     private void InitBoard()
     {
@@ -360,7 +359,7 @@ public class BoardManager : MonoBehaviour
                 {
                     // Kiểm tra điều kiện merge dựa trên setting
                     bool canMerge = requireEmptySpaceForMerge ? CanMergeSafely(tile1, tile2) : true;
-                    
+                    GamePlayCtrl.Instance.levelLoader.targetValue = GamePlayCtrl.Instance.levelLoader.GetHighestTileValue() * 2;
                     if (canMerge)
                     {
                         StartCoroutine(MergeTwoTiles(tile1, tile2));
@@ -560,19 +559,6 @@ public class BoardManager : MonoBehaviour
                 MarkOccupancy(mainTile, true);
             }
         }
-
-        // Cập nhật activeTile nếu cần
-        if (activeTile == tileToRemove)
-        {
-            activeTile = mainTile;
-            SetTileVisual(activeTile, true);
-        }
-        
-        // Kiểm tra merge tiếp theo sau khi hoàn thành
-        yield return new WaitForSeconds(0.1f);
-        CheckAndMergeTiles();
-        
-        // Kiểm tra điều kiện thắng
         CheckWinCondition();
     }
     
