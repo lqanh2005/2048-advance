@@ -16,7 +16,7 @@ public class SettingPanel : MonoBehaviour
     public void Init()
     {
         btnClose.onClick.AddListener(()=> this.gameObject.SetActive(false));
-        //btnRetry.onClick.AddListener(() => GamePlayController.Instance.playerContaint.HandleRetry());
+        btnRetry.onClick.AddListener(HandleRetry);
         float music = PlayerPrefs.GetFloat(KEY_MUSIC, 0.8f);
         float sfx = PlayerPrefs.GetFloat(KEY_SFX, 0.8f);
         float vibe = PlayerPrefs.GetFloat(KEY_VIBE, 1f);
@@ -68,5 +68,9 @@ public class SettingPanel : MonoBehaviour
             Debug.Log("Vibration bị tắt trong settings");
         }
     }
-
+    public void HandleRetry()
+    {
+        GameManager.Instance.adsController.ShowInterstitialAd(() => Initiate.Fade("GamePlayScene", Color.black, 2f));
+        GameManager.Instance.musicController.HandleClick(GameManager.Instance.musicController.click);
+    }
 }

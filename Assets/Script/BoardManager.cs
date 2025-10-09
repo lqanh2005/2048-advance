@@ -92,12 +92,6 @@ public class BoardManager : MonoBehaviour
 
             MarkOccupancy(tile, true);
             
-            // Đặt active tile nếu có
-            if (tileData.isActive)
-            {
-                activeTile = tile;
-                SetTileVisual(activeTile, true);
-            }
         }
         
     }
@@ -346,25 +340,28 @@ public class BoardManager : MonoBehaviour
     
     void CheckAndMergeTiles()
     {
+        // Chỉ kiểm tra merge với tile đang được select (activeTile)
+        if (activeTile == null)
+            return;
+        
         List<Tile> allTiles = GetAllTiles();
         
-        for (int i = 0; i < allTiles.Count; i++)
+        // Duyệt qua tất cả tiles để tìm tile có thể merge với activeTile
+        foreach (Tile otherTile in allTiles)
         {
-            for (int j = i + 1; j < allTiles.Count; j++)
+            // Bỏ qua chính activeTile
+            if (otherTile == activeTile)
+                continue;
+            
+            if (CanMerge(activeTile, otherTile))
             {
-                Tile tile1 = allTiles[i];
-                Tile tile2 = allTiles[j];
-                
-                if (CanMerge(tile1, tile2))
+                // Kiểm tra điều kiện merge dựa trên setting
+                bool canMerge = requireEmptySpaceForMerge ? CanMergeSafely(activeTile, otherTile) : true;
+                GamePlayCtrl.Instance.levelLoader.targetValue = GamePlayCtrl.Instance.levelLoader.GetHighestTileValue() * 2;
+                if (canMerge)
                 {
-                    // Kiểm tra điều kiện merge dựa trên setting
-                    bool canMerge = requireEmptySpaceForMerge ? CanMergeSafely(tile1, tile2) : true;
-                    GamePlayCtrl.Instance.levelLoader.targetValue = GamePlayCtrl.Instance.levelLoader.GetHighestTileValue() * 2;
-                    if (canMerge)
-                    {
-                        StartCoroutine(MergeTwoTiles(tile1, tile2));
-                        return;
-                    }
+                    StartCoroutine(MergeTwoTiles(activeTile, otherTile));
+                    return;
                 }
             }
         }

@@ -40,8 +40,8 @@ MonoBehaviour:
       width: 1
       value: 2
       isActive: 0
-  numberOfLevels: 10
-  minDifficulty: 3.43
+  numberOfLevels: 100
+  minDifficulty: 4.5
   maxDifficulty: 10
   levelPrefix: level_
   maxRetryAttempts: 10

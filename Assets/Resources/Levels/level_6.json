@@ -1,29 +1,77 @@
 {
-  "rows": 7,
-  "cols": 7,
+  "rows": 6,
+  "cols": 6,
   "tiles": [
     {
-      "row": 5,
+      "row": 1,
       "col": 4,
-      "height": 2,
-      "width": 3,
-      "value": "32",
+      "height": 1,
+      "width": 2,
+      "value": "4",
+      "isActive": true
+    },
+    {
+      "row": 1,
+      "col": 0,
+      "height": 1,
+      "width": 2,
+      "value": "4",
       "isActive": true
     },
     {
       "row": 3,
-      "col": 2,
-      "height": 2,
+      "col": 0,
+      "height": 1,
       "width": 2,
-      "value": "16",
+      "value": "4",
+      "isActive": true
+    },
+    {
+      "row": 1,
+      "col": 2,
+      "height": 1,
+      "width": 2,
+      "value": "4",
+      "isActive": true
+    },
+    {
+      "row": 4,
+      "col": 4,
+      "height": 1,
+      "width": 2,
+      "value": "4",
+      "isActive": true
+    },
+    {
+      "row": 2,
+      "col": 4,
+      "height": 1,
+      "width": 1,
+      "value": "2",
+      "isActive": true
+    },
+    {
+      "row": 4,
+      "col": 1,
+      "height": 1,
+      "width": 2,
+      "value": "4",
       "isActive": true
     },
     {
       "row": 5,
-      "col": 0,
-      "height": 2,
+      "col": 4,
+      "height": 1,
       "width": 2,
-      "value": "16",
+      "value": "4",
+      "isActive": true
+    },
+    {
+      "row": 3,
+      "col": 3,
+      "height": 1,
+      "width": 1,
+      "value": "2",
       "isActive": true
     }
   ]

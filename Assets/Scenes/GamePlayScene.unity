@@ -619,7 +619,7 @@ MonoBehaviour:
   tilesParent: {fileID: 1517658327}
   tilePrefab: {fileID: 4952751243874982604, guid: 8dcbf8f7f70c2a64cac9e73b20ceea97, type: 3}
   activeTile: {fileID: 0}
-  moveDuration: 0.15
+  moveDuration: 0.05
   raycaster: {fileID: 1691787762}
   eventSystem: {fileID: 1605668682}
   swipeThreshold: 50
